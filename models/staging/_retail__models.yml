@@ -1,0 +1,78 @@
+
+version: 2
+
+models:
+  - name: stg_retail__orders
+    description: "staging model for retail orders"
+    columns:
+      - name: order_id
+        description: "The primary key for this table"
+        data_tests:
+          - unique
+          - not_null
+      - name: order_date
+      - name: customer_id
+      - name: order_status
+  - name: stg_retail__order_items
+    description: "staging model for retail orders"
+    columns:
+      - name: order_item_id
+        description: "The primary key for this table"
+        data_tests:
+          - unique
+          - not_null
+      - name: order_id
+      - name: product_id
+      - name: quantity
+      - name: subtotal
+      - name: product_price
+  - name: stg_retail__departments
+    description: "staging model for retail departments"
+    columns:
+      - name: department_id
+        description: "The primary key for this table"
+        data_tests:
+          - unique
+          - not_null
+      - name: department_name
+  - name: stg_retail__customers
+    description: "staging model for retail customers"
+    columns:
+      - name: customer_id
+        description: "The primary key for this table"
+        data_tests:
+          - unique
+          - not_null
+      - name: first_name
+      - name: last_name
+      - name: email
+      - name: street
+      - name: city
+      - name: state
+      - name: zipcode
+  - name: stg_retail__categories
+    description: "staging model for retail categories"
+    columns:
+      - name: category_id
+        description: "The primary key for this table"
+        data_tests:
+          - unique
+          - not_null
+      - name: department_id
+      - name: category_name
+  - name: stg_retail__products
+    description: "staging model for retail products"
+    columns:
+      - name: product_id
+        description: "The primary key for this table"
+        data_tests:
+          - unique
+          - not_null
+      - name: category_id
+      - name: product_name
+      - name: product_description
+      - name: product_price
+      # - name: product_image
+
+
+
