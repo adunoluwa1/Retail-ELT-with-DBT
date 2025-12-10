@@ -45,7 +45,7 @@ models:
           - not_null
       - name: first_name
       - name: last_name
-      - name: email
+      # - name: email
       - name: street
       - name: city
       - name: state

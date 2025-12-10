@@ -1,0 +1,45 @@
+
+version: 2
+
+models:
+  - name: int_retail__orders
+    description: "intermediate model for retail orders"
+    columns:
+      - name: order_id
+        description: "The primary key for this table"
+        data_tests:
+          - unique
+          - not_null
+      - name: order_id
+      - name: customer_id
+      - name: order_status
+        data_tests:
+          - accepted_values:
+              values: ["COMPLETE","PENDING","CLOSED","SUSPECTED FRAUD"]
+      - name: order_timestamp
+      - name: order_date
+      - name: order_year
+      - name: order_month_name
+      - name: order_month_num
+      - name: order_week_of_year
+      - name: order_day_of_month
+      - name: order_day_name
+      - name: order_day_of_week_num
+      - name: etl_load_timestamp
+  - name: int_retail__order_items
+    description: intermediate layer for retail order_items
+    columns:
+      - name: order_item_id
+        data_tests:
+          - unique
+          - not_null
+      - name: order_id
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('int_retail__orders')
+                field: order_id
+      - name: product_id
+      - name: quantity
+      - name: subtotal
+      - name: product_price 
