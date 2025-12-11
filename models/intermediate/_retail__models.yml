@@ -43,3 +43,51 @@ models:
       - name: quantity
       - name: subtotal
       - name: product_price 
+  - name: int_retail__customers
+    description: 'intermediate layer for retail customers'
+    columns:
+      - name: customer_id
+        description: "The primary key for this table"
+        data_tests:
+          - unique
+          - not_null
+      - name: first_name
+      - name: last_name
+      - name: full_name
+      - name: street
+      - name: city
+      - name: state
+      - name: zipcode
+  - name: int_retail__products
+    description: "Intermediate table for retail products"
+    columns:
+      - name: product_id
+        description: "The primary key for the product table"
+        data_tests:
+          - unique
+          - not_null
+      - name: category_id
+      - name: product_name
+      - name: product_price
+      - name: etl_load_timestam
+  - name: int_retail__departments
+    description: "Intermediate table for retail departments"
+    columns:
+      - name: department_id
+        description: "The primary key for the product table"
+        data_tests:
+          - unique
+          - not_null
+      - name: department_name
+      - name: etl_load_timestam
+  - name: int_retail__categories
+    description: "Intermediate table for retail categories"
+    columns:
+      - name: category_id
+        description: "The primary key for the product table"
+        data_tests:
+          - unique
+          - not_null
+      - name: department_id
+      - name: category_name
+      - name: etl_load_timestam

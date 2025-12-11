@@ -20,5 +20,5 @@ SELECT
     EXTRACT('DAY' FROM order_date) AS order_day_of_month,
     TO_CHAR(order_date, 'day') AS order_day_name,
     EXTRACT('DOW' FROM order_date) AS order_day_of_week_num,
-    CURRENT_TIMESTAMP AS etl_load_timestamp
+    {{ dbt.current_timestamp() }} etl_load_timestamp
 FROM orders
