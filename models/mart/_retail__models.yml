@@ -1,0 +1,19 @@
+version: 2
+
+models:
+  - name: dim_customers
+    description: "Dimension table for customers"
+    columns:
+      - name: customer_id
+      - name: first_name
+      - name: last_name
+      - name: full_name
+      - name: street
+      - name: city
+      - name: state
+      - name: zipcode
+      - name: total_order_value
+      - name: avg_order_value
+      - name: etl_load_timestamp
+  - name: top_products
+    description: "Products with highest revenue"  
