@@ -11,7 +11,7 @@ SELECT
         {{- initcap_and_coalesce("last_name",'') -}}) AS full_name,
     COALESCE("street",'UNKNOWN') AS street,
     {{- initcap_and_coalesce("city",'UNKNOWN') -}} AS city,
-    {{- initcap_and_coalesce("state",'UNKNOWN') -}} AS state,
+    COALESCE(UPPER("state"),'') AS state,
     zipcode,
     {{ dbt.current_timestamp() }} etl_load_timestamp
 FROM customers

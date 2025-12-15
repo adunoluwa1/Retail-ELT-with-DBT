@@ -15,7 +15,8 @@ models:
       - name: order_status
         data_tests:
           - accepted_values:
-              values: ["COMPLETE","PENDING","CLOSED","SUSPECTED FRAUD"]
+              arguments:
+                values: ["COMPLETE","PENDING","CLOSED","SUSPECTED FRAUD"]
       - name: order_timestamp
       - name: order_date
       - name: order_year
@@ -90,4 +91,32 @@ models:
           - not_null
       - name: department_id
       - name: category_name
-      - name: etl_load_timestam
+      - name: etl_load_timestamp
+  - name: int_fact_sales
+    description: "Intermediate fact_sales table"
+    columns:
+      - name: order_item_id
+      - name: product_id
+      - name: order_id
+      - name: customer_id
+      - name: quantity
+      - name: total_revenue
+      - name: product_price
+      - name: order_status
+      - name: order_timestamp
+  - name: int_dim_product
+    description: "Intermediate product dimension table"
+    columns:
+      - name: product_id
+      - name: product_name
+      - name: category_id
+      - name: category_name
+      - name: department_id
+      - name: department_name
+      - name: product_price
+      - name: etl_load_timestamp
+  # - name: int_dim_order_totals
+  #   description: "Intermediate order_totals dimension table"
+  #   columns:
+  #     - name: order_id
+  #     - name: total_order_value
