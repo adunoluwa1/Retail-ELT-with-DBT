@@ -1,9 +1,10 @@
-{{ congif(materialized='table')}}
+{{ config(materialized='table')}}
 
 WITH sales AS (
 	SELECT product_id,
 	SUM(total_revenue) AS total_revenue
 	FROM {{ref('int_fact_sales')}}
+    WHERE order_status = 'COMPLETED'
 	GROUP BY 1
 ),
 products AS (
@@ -19,7 +20,7 @@ SELECT
     p.department_id,
     p.department_name,
     COALESCE(s.total_revenue,0) total_revenue
-FROM products p 
-LEFT JOIN sales s
+FROM sales s
+LEFT JOIN products p 
 USING(product_id)
-ORDER BY total_revenue DESC;
+ORDER BY total_revenue DESC
