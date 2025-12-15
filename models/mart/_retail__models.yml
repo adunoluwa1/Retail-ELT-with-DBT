@@ -12,6 +12,7 @@ models:
       - name: city
       - name: state
       - name: zipcode
+      - name: first_order_date
       - name: total_order_value
       - name: avg_order_value
       - name: etl_load_timestamp
@@ -37,3 +38,23 @@ models:
       - name: rolling_7_days
       - name: rolling_30_days
       - name: etl_load_timestamp
+  - name: customer_order_count
+    description: "Count of customer orders"
+    columns:
+      - name: customer_id
+      - name: num_orders
+      - name: num_completed_orders
+      - name: num_pending_orders
+      - name: num_closed_orders
+      - name: num_suspected_fraud_orders
+      - name: etl_load_timestamp
+  - name: customer_cohorts
+    description: "Cohort analysis of customers"
+    columns:
+      - name: cohort_month,
+      - name: activity_month,
+      - name: month_number,
+      - name: active_customers,
+      - name: retenton_rate
+      - name: etl_load_timestamp
+
