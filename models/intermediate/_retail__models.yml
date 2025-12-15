@@ -1,122 +1,190 @@
-
 version: 2
 
 models:
   - name: int_retail__orders
-    description: "intermediate model for retail orders"
+    description: >
+      Intermediate retail orders model containing one row per order.
+      This table standardizes order attributes, timestamps, and
+      calendar breakdowns for downstream fact and metric models.
     columns:
       - name: order_id
-        description: "The primary key for this table"
+        description: "Unique identifier for the order."
         data_tests:
           - unique
           - not_null
-      - name: order_id
       - name: customer_id
+        description: "Unique identifier of the customer who placed the order."
       - name: order_status
+        description: "Current status of the order in the order lifecycle."
         data_tests:
           - accepted_values:
               arguments:
-                values: ["COMPLETED","PENDING","CLOSED","SUSPECTED_FRAUD"]
+                values: ["COMPLETED", "PENDING", "CLOSED", "SUSPECTED_FRAUD"]
       - name: order_timestamp
+        description: "Exact timestamp when the order was created."
       - name: order_date
+        description: "Date (YYYY-MM-DD) when the order was created."
       - name: order_year
+        description: "Calendar year in which the order was placed."
       - name: order_month_name
+        description: "Name of the month in which the order was placed."
       - name: order_month_num
+        description: "Numeric representation of the order month (1–12)."
       - name: order_week_of_year
+        description: "Week number of the year when the order was placed."
       - name: order_day_of_month
+        description: "Day of the month on which the order was placed."
       - name: order_day_name
+        description: "Name of the weekday on which the order was placed."
       - name: order_day_of_week_num
+        description: "Numeric day of the week for the order (1–7)."
       - name: etl_load_timestamp
+        description: "Timestamp indicating when the record was loaded by the ETL process."
+
   - name: int_retail__order_items
-    description: intermediate layer for retail order_items
+    description: >
+      Intermediate order items model containing one row per product per order.
+      Used to calculate revenue, quantities sold, and product-level metrics.
     columns:
       - name: order_item_id
+        description: "Unique identifier for the order item."
         data_tests:
           - unique
           - not_null
       - name: order_id
+        description: "Identifier of the order associated with this order item."
         data_tests:
           - relationships:
               arguments:
                 to: ref('int_retail__orders')
                 field: order_id
       - name: product_id
+        description: "Identifier of the product included in the order item."
       - name: quantity
+        description: "Number of units of the product ordered."
       - name: subtotal
-      - name: product_price 
+        description: "Total monetary value of the order item (quantity × product price)."
+      - name: product_price
+        description: "Unit price of the product at the time of purchase."
+
   - name: int_retail__customers
-    description: 'intermediate layer for retail customers'
+    description: >
+      Intermediate customers model containing customer profile and
+      address information used for dimensional analysis.
     columns:
       - name: customer_id
-        description: "The primary key for this table"
+        description: "Unique identifier for the customer."
         data_tests:
           - unique
           - not_null
       - name: first_name
+        description: "Customer’s first name."
       - name: last_name
+        description: "Customer’s last name."
       - name: full_name
+        description: "Concatenated full name of the customer."
       - name: street
+        description: "Street address of the customer."
       - name: city
+        description: "City where the customer resides."
       - name: state
+        description: "State or province of the customer."
       - name: zipcode
+        description: "Postal or ZIP code of the customer."
+
   - name: int_retail__products
-    description: "Intermediate table for retail products"
+    description: >
+      Intermediate products model containing product attributes and pricing.
+      Used as the foundation for product and category analysis.
     columns:
       - name: product_id
-        description: "The primary key for the product table"
+        description: "Unique identifier for the product."
         data_tests:
           - unique
           - not_null
       - name: category_id
+        description: "Identifier of the category the product belongs to."
       - name: product_name
+        description: "Name of the product."
       - name: product_price
-      - name: etl_load_timestam
+        description: "Standard unit price of the product."
+      - name: etl_load_timestamp
+        description: "Timestamp indicating when the record was loaded by the ETL process."
+
   - name: int_retail__departments
-    description: "Intermediate table for retail departments"
+    description: >
+      Intermediate departments model containing department-level metadata.
+      Used for higher-level product and category aggregation.
     columns:
       - name: department_id
-        description: "The primary key for the product table"
+        description: "Unique identifier for the department."
         data_tests:
           - unique
           - not_null
       - name: department_name
-      - name: etl_load_timestam
+        description: "Name of the department."
+      - name: etl_load_timestamp
+        description: "Timestamp indicating when the record was loaded by the ETL process."
+
   - name: int_retail__categories
-    description: "Intermediate table for retail categories"
+    description: >
+      Intermediate categories model linking products to departments.
+      Enables category- and department-level reporting.
     columns:
       - name: category_id
-        description: "The primary key for the product table"
+        description: "Unique identifier for the product category."
         data_tests:
           - unique
           - not_null
       - name: department_id
+        description: "Identifier of the department associated with the category."
       - name: category_name
+        description: "Name of the product category."
       - name: etl_load_timestamp
+        description: "Timestamp indicating when the record was loaded by the ETL process."
+
   - name: int_fact_sales
-    description: "Intermediate fact_sales table"
+    description: >
+      Intermediate fact table at the order-item grain.
+      Used to calculate revenue, quantities sold, and customer purchase behavior.
     columns:
       - name: order_item_id
+        description: "Unique identifier for the order item."
       - name: product_id
+        description: "Identifier of the product sold."
       - name: order_id
+        description: "Identifier of the order associated with the sale."
       - name: customer_id
+        description: "Identifier of the customer who made the purchase."
       - name: quantity
+        description: "Number of units sold for the order item."
       - name: total_revenue
+        description: "Total revenue generated from the order item."
       - name: product_price
+        description: "Unit price of the product at the time of sale."
       - name: order_status
+        description: "Status of the order associated with the sale."
       - name: order_timestamp
+        description: "Timestamp when the order was created."
+
   - name: int_dim_product
-    description: "Intermediate product dimension table"
+    description: >
+      Intermediate product dimension combining product, category,
+      and department attributes into a single denormalized table.
     columns:
       - name: product_id
+        description: "Unique identifier for the product."
       - name: product_name
+        description: "Name of the product."
       - name: category_id
+        description: "Identifier of the product category."
       - name: category_name
+        description: "Name of the product category."
       - name: department_id
+        description: "Identifier of the department."
       - name: department_name
+        description: "Name of the department."
       - name: product_price
+        description: "Standard unit price of the product."
       - name: etl_load_timestamp
-  # - name: int_dim_order_totals
-  #   description: "Intermediate order_totals dimension table"
-  #   columns:
-  #     - name: order_id
-  #     - name: total_order_value
+        description: "Timestamp indicating when the record was loaded by the ETL process."

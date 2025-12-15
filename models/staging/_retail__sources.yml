@@ -1,14 +1,103 @@
-
 version: 2
 
 sources:
   - name: public
+    description: >
+      Raw retail source schema containing operational tables ingested
+      directly from the production system. These tables represent the
+      system of record and are lightly validated before transformation
+      in the staging layer.
     tables:
       - name: orders
+        description: >
+          Raw orders table containing one record per customer order,
+          including order dates, customer references, and order status.
+        columns:
+          - name: order_id
+            description: "Primary key for the order record in the source system."
+          - name: order_date
+            description: "Date the order was created in the source system."
+          - name: order_customer_id
+            description: "Identifier of the customer who placed the order."
+          - name: order_status
+            description: "Current lifecycle status of the order."
+
       - name: order_items
+        description: >
+          Raw order items table containing one row per product per order.
+          Used to calculate quantities sold and revenue metrics.
+        columns:
+          - name: order_item_id
+            description: "Primary key for the order item record."
+          - name: order_item_order_id
+            description: "Foreign key referencing the associated order."
+          - name: order_item_product_id
+            description: "Foreign key referencing the product."
+          - name: order_item_quantity
+            description: "Number of units ordered."
+          - name: order_item_subtotal
+            description: "Total monetary value for the order item."
+          - name: order_item_product_price
+            description: "Unit price of the product at time of order."
+
       - name: products
+        description: >
+          Raw products table containing product attributes and pricing
+          information as maintained in the source system.
+        columns:
+          - name: product_id
+            description: "Primary key for the product."
+          - name: product_category_id
+            description: "Identifier of the category the product belongs to."
+          - name: product_name
+            description: "Name of the product."
+          - name: product_description
+            description: "Text description of the product."
+          - name: product_price
+            description: "Standard unit price of the product."
+
       - name: departments
+        description: >
+          Raw departments table defining high-level organizational
+          groupings for products.
+        columns:
+          - name: department_id
+            description: "Primary key for the department."
+          - name: department_name
+            description: "Name of the department."
+
       - name: categories
+        description: >
+          Raw categories table defining product groupings and their
+          relationship to departments.
+        columns:
+          - name: category_id
+            description: "Primary key for the category."
+          - name: category_department_id
+            description: "Foreign key referencing the department."
+          - name: category_name
+            description: "Name of the product category."
+
       - name: customers
-
-
+        description: >
+          Raw customers table containing customer profile and address
+          information as captured in the source system.
+        columns:
+          - name: customer_id
+            description: "Primary key for the customer."
+          - name: customer_fname
+            description: "Customer’s first name."
+          - name: customer_lname
+            description: "Customer’s last name."
+          - name: customer_email
+            description: "Customer’s email."
+          - name: customer_password
+            description: "Customer’s encrypted password."
+          - name: customer_street
+            description: "Street address of the customer."
+          - name: customer_city
+            description: "City where the customer resides."
+          - name: customer_state
+            description: "State or province of the customer."
+          - name: customer_zipcode
+            description: "Postal or ZIP code of the customer."

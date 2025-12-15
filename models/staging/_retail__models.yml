@@ -1,78 +1,112 @@
-
 version: 2
 
 models:
   - name: stg_retail__orders
-    description: "staging model for retail orders"
+    description: >
+      Staging model for retail orders.
+      This model performs light cleaning and standardization of raw order data
+      and serves as the foundation for downstream intermediate and fact models.
     columns:
       - name: order_id
-        description: "The primary key for this table"
+        description: "Unique identifier for the order in the source system."
         data_tests:
           - unique
           - not_null
       - name: order_date
+        description: "Date when the order was created in the source system."
       - name: customer_id
+        description: "Identifier of the customer who placed the order."
       - name: order_status
+        description: "Current status of the order as recorded in the source system."
+
   - name: stg_retail__order_items
-    description: "staging model for retail orders"
+    description: >
+      Staging model for retail order items.
+      Contains one row per product per order with minimal transformation applied.
     columns:
       - name: order_item_id
-        description: "The primary key for this table"
+        description: "Unique identifier for the order item in the source system."
         data_tests:
           - unique
           - not_null
       - name: order_id
+        description: "Identifier of the order associated with the order item."
       - name: product_id
+        description: "Identifier of the product included in the order item."
       - name: quantity
+        description: "Number of units of the product ordered."
       - name: subtotal
+        description: "Total value of the order item before taxes or discounts."
       - name: product_price
+        description: "Unit price of the product at the time of purchase."
+
   - name: stg_retail__departments
-    description: "staging model for retail departments"
+    description: >
+      Staging model for retail departments.
+      Provides standardized department identifiers and names for downstream joins.
     columns:
       - name: department_id
-        description: "The primary key for this table"
+        description: "Unique identifier for the department in the source system."
         data_tests:
           - unique
           - not_null
       - name: department_name
+        description: "Name of the department."
+
   - name: stg_retail__customers
-    description: "staging model for retail customers"
+    description: >
+      Staging model for retail customers.
+      Contains customer profile and address information with minimal transformation.
     columns:
       - name: customer_id
-        description: "The primary key for this table"
+        description: "Unique identifier for the customer in the source system."
         data_tests:
           - unique
           - not_null
       - name: first_name
+        description: "Customer’s first name."
       - name: last_name
-      # - name: email
+        description: "Customer’s last name."
       - name: street
+        description: "Street address of the customer."
       - name: city
+        description: "City where the customer resides."
       - name: state
+        description: "State or province of the customer."
       - name: zipcode
+        description: "Postal or ZIP code of the customer."
+
   - name: stg_retail__categories
-    description: "staging model for retail categories"
+    description: >
+      Staging model for retail product categories.
+      Links categories to departments and standardizes category attributes.
     columns:
       - name: category_id
-        description: "The primary key for this table"
+        description: "Unique identifier for the product category in the source system."
         data_tests:
           - unique
           - not_null
       - name: department_id
+        description: "Identifier of the department associated with the category."
       - name: category_name
+        description: "Name of the product category."
+
   - name: stg_retail__products
-    description: "staging model for retail products"
+    description: >
+      Staging model for retail products.
+      Contains product-level attributes and pricing information
+      standardized from the source system.
     columns:
       - name: product_id
-        description: "The primary key for this table"
+        description: "Unique identifier for the product in the source system."
         data_tests:
           - unique
           - not_null
       - name: category_id
+        description: "Identifier of the category the product belongs to."
       - name: product_name
+        description: "Name of the product."
       - name: product_description
+        description: "Textual description of the product."
       - name: product_price
-      # - name: product_image
-
-
-
+        description: "Standard unit price of the product."

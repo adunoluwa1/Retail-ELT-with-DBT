@@ -57,7 +57,7 @@ ORDER BY 1,2,3
 
 
 
-
+/* Wide Table */
 -- CREATE EXTENSION IF NOT EXISTS tablefunc;
 -- WITH analysis AS (
 --     SELECT * FROM CROSSTAB($$
