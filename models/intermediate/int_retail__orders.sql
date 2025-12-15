@@ -8,7 +8,7 @@ SELECT
     customer_id,
     CASE 
         WHEN order_status = 'COMPLETE' THEN 'COMPLETED'
-        WHEN order_status = 'SUSPECTED_FRAUD' THEN 'SUSPECTED FRAUD'
+        WHEN order_status = 'SUSPECTED_FRAUD' THEN 'SUSPECTED_FRAUD'
         WHEN order_status IN ('CLOSED','CANCELED') THEN 'CLOSED' ELSE 'PENDING'
         END AS order_status,
     order_date AS order_timestamp,
