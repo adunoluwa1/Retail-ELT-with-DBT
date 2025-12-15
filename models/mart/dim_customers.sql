@@ -6,10 +6,11 @@ WITH customers AS (
 sales AS (
     SELECT * FROM {{ref('int_fact_sales')}}
 ),
-sales_tlv AS (
+sales_tlv_fo AS (
     SELECT 
         customer_id,
-        SUM(total_revenue) AS total_lifetime_value
+        SUM(total_revenue) AS total_lifetime_value,
+        MIN(order_timestamp::DATE) AS first_order_date
     FROM sales
     GROUP BY 1
 ),
@@ -39,11 +40,12 @@ SELECT
     c.city,
     c.state,
     c.zipcode,
+    s.first_order_date,
     s.total_lifetime_value,
     o.avg_order_value,
     {{dbt.current_timestamp()}} etl_load_timestamp
-FROM customers c
-LEFT JOIN sales_tlv s
+FROM sales_tlv_fo s
+LEFT JOIN customers c
 USING(customer_id)
 LEFT JOIN customer_aov o
 USING(customer_id)
