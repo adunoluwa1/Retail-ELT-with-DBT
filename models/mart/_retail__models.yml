@@ -16,4 +16,24 @@ models:
       - name: avg_order_value
       - name: etl_load_timestamp
   - name: top_products
-    description: "Products with highest revenue"  
+    description: "Products with highest revenue"
+    columns:
+      - name: product_id
+      - name: product_name
+      - name: category_id
+      - name: category_name
+      - name: department_id
+      - name: department_name
+      - name: total_revenue
+      - name: etl_load_timestamp
+  - name: sales_metrics
+    description: "Daily sales metrics"
+    columns:
+      - name: order_date
+      - name: daily_revenue
+      - name: daily_total_orders
+      - name: daily_units_sold
+      - name: daily_avg_order_value
+      - name: rolling_7_days
+      - name: rolling_30_days
+      - name: etl_load_timestamp

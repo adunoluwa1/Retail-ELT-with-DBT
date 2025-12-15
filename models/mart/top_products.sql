@@ -19,7 +19,8 @@ SELECT
     p.category_name,
     p.department_id,
     p.department_name,
-    COALESCE(s.total_revenue,0) total_revenue
+    COALESCE(s.total_revenue,0) total_revenue,
+    {{dbt.current_timestamp()}} etl_load_timestamp
 FROM sales s
 LEFT JOIN products p 
 USING(product_id)
