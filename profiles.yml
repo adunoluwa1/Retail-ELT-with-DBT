@@ -1,0 +1,15 @@
+retail_elt:
+  outputs:
+    dev:
+      type: postgres
+      dbname: "{{env_var('DBT_DBNAME')}}"
+      host: "{{env_var('DBT_HOST')}}"
+      user: "{{env_var('DBT_USER')}}"
+      password: "{{env_var('DBT_PASSWORD')}}"
+      port: "{{env_var('DBT_PORT') | int }}"
+      schema: "{{env_var('DBT_SCHEMA')}}"
+      threads: 4
+  target: dev
+
+
+  # rretail_elt_db
