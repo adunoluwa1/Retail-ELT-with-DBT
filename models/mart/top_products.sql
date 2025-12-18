@@ -2,7 +2,8 @@
 
 WITH sales AS (
 	SELECT product_id,
-	SUM(total_revenue) AS total_revenue
+	SUM(total_revenue) AS total_revenue,
+	COUNT(DISTINCT quantity) AS total_units_sold
 	FROM {{ref('int_fact_sales')}}
     WHERE order_status = 'COMPLETED'
 	GROUP BY 1
@@ -20,6 +21,7 @@ SELECT
     p.department_id,
     p.department_name,
     COALESCE(s.total_revenue,0) total_revenue,
+    COALESCE(s.total_units_sold,0) total_units_sold,
     {{dbt.current_timestamp()}} etl_load_timestamp
 FROM sales s
 LEFT JOIN products p 

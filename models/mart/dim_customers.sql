@@ -5,12 +5,14 @@ WITH customers AS (
 ),
 sales AS (
     SELECT * FROM {{ref('int_fact_sales')}}
+    WHERE order_status = 'COMPLETED'
 ),
-sales_tlv_fo AS (
+sales_agg AS (
     SELECT 
         customer_id,
         SUM(total_revenue) AS total_lifetime_value,
-        MIN(order_timestamp::DATE) AS first_order_date
+        MIN(order_timestamp::DATE) AS first_order_date,
+        COUNT(DISTINCT order_id) AS total_num_orders
     FROM sales
     GROUP BY 1
 ),
@@ -42,9 +44,10 @@ SELECT
     c.zipcode,
     s.first_order_date,
     s.total_lifetime_value,
+    s.total_num_orders,
     o.avg_order_value,
     {{dbt.current_timestamp()}} etl_load_timestamp
-FROM sales_tlv_fo s
+FROM sales_agg s
 LEFT JOIN customers c
 USING(customer_id)
 LEFT JOIN customer_aov o
